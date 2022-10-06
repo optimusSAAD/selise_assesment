@@ -1,0 +1,130 @@
+﻿@{ ViewBag.Title = "Bookmark"; }
+
+<style>
+    .input-group {
+        display: flex;
+        align-content: stretch;
+    }
+
+        .input-group > input {
+            flex: 1 0 auto;
+        }
+
+    .input-group-addon {
+        background: #eee;
+        border: 1px solid #ccc;
+        padding: 0.5em 1em;
+    }
+</style>
+<div class="jumbotron">
+    <div class="col-md-6"><p class="lead">Bookmark Manager</p></div>
+    <div class="col-md-6">
+        <p>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add Bookmark
+            </button>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 overflow-auto" ng-repeat=" c in CategoryList">
+        <p>Category: {{c.category_name}}</p>
+        <div class="col-md-12 overflow-auto" style="height:150px;width:350px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+            <br />
+            <div ng-repeat="x in c.details">
+                <div class="col-md-6" >
+                    <h5><a href="https://{{x.url}}" target="_blank">{{x.title}}</a></h5>
+                </div>
+                <div class="col-md-6">
+                    <p><a class="btn btn-default" data-toggle="modal" data-target="#detailsModal" ng-click="setData(x.title,x.url,c.category_name)">details</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Bookmark</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="input-group form-group">
+                    <input type="text" class="form-control" placeholder="Title" ng-model="model.title" required >
+                </div>
+
+                <div class="input-group form-group">
+                    <input type="text" class="form-control" placeholder="URL" ng-model="model.url" required>
+                </div>
+
+                <div class="input-group">
+
+                    <div class="select-style">
+                        <select class="form-control" ng-model="model.category_id"
+                                ng-options="item.id as item.category_name for item in CategoryList" id="Category"
+                                name="Category" required ng-disabled="show_button">
+                            <option></option>
+                        </select>
+                    </div>
+                    <button ng-click="click()">+</button>
+                </div>
+
+                <div class="input-group form-group" ng-show="show_button">
+                    <input type="text" class="form-control" placeholder="insert category name" ng-model="model.category_name">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <button type="button" class=" btn btn-secondary " data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button type="button" class="md-6 btn btn-primary " ng-click="SaveBookmark()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="input-group form-group">
+                    <label >Title: </label>
+                    <p> {{modalData.title}}</p>                    
+                </div>
+
+                <div class="input-group form-group">
+                    <label>URL: </label>
+                    <a href="https://{{modalData.url}}" target="_blank"> {{modalData.url}} </a>
+                </div>
+
+                <div class="input-group">
+                    <label>Category: </label>
+                    <p> {{modalData.category_name}}</p>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <button type="button" class=" btn btn-secondary " data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/customjs/IndexController.js"></script>
